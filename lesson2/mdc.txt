@@ -1,0 +1,39 @@
+1.
+Data Def'n Lang (DDL) - CREATE ALTER
+Data Manipulation Lang DML - INSERT SELECT
+
+2.
+SELECT is part of the DML
+
+3.
+CREATE TABLE
+uses DDL
+
+4.
+ALTER TABLE
+uses DDL
+
+5.
+INSERT INTO
+uses DML
+
+6.
+UPDATE
+uses DML
+
+7.
+\d things
+behaves like DDL, but is a psql cmd, and not part of SQL
+
+8.
+DELETE FROM
+uses DML
+
+9.
+DROP DATABASE
+uses DDL
+its main purpose is to operate on data defs; the deletion of data is merely a side-effect
+
+10.
+CREATE SEQUENCE
+uses DDL

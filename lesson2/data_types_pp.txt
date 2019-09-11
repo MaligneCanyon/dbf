@@ -1,0 +1,19 @@
+1.
+varchar: variable length, but a max length must be spec'd
+text: variable length, max length unspec'd
+
+2.
+integer: whole numbers between ~ -2B and +2B
+decimal: fp w/ a user-spec'd precision; exact
+real: double-precision fp; inexact
+
+3.
+~ 2.1B
+
+4.
+timestamp: contains the date and time
+date: date only (no time)
+
+5.
+You can't store a time w/ a timezone in column of type `timestamp`,
+but you can in one w/ type `timestamptz`

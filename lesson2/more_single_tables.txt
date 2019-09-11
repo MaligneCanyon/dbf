@@ -1,0 +1,13 @@
+1.
+createdb residents
+
+2.
+step 1: right-click the link and choose 'Save Link As' to save the data to a file locally
+step 2: load the local file using
+  psql -d residents < residents_with_data.sql
+
+3.
+SELECT state, count(state) FROM people GROUP BY state ORDER BY count DESC LIMIT 10;
+
+4.
+SELECT (regexp_split_to_array(email, '@'))[2] AS domain, count(email) FROM people GROUP BY domain ORDER BY count DESC;

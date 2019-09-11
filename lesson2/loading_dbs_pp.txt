@@ -1,0 +1,47 @@
+1.
+Step 1: save the content to a file locally
+Step 2: load the local file using
+  psql -d test < loading_dbs_pp1.sql
+- the file creates a table called 'films' and populates it w/ data
+- output of the cmds is
+  NOTICE:  table "films" does not exist, skipping
+  DROP TABLE
+  CREATE TABLE
+  INSERT 0 1
+  INSERT 0 1
+  INSERT 0 1
+- the first cmd drops the (public ?) table if it exists
+
+2.
+SELECT * FROM films;
+
+3.
+SELECT * FROM films WHERE length(title) < 12;
+
+4.
+ALTER TABLE films
+  ADD COLUMN director varchar(50),
+  ADD COLUMN duration int DEFAULT 0;
+
+5.
+UPDATE films SET director = 'John McTiernan', duration = 132 WHERE title = 'Die Hard';
+UPDATE films SET director = 'Michael Curtiz', duration = 102 WHERE title = 'Casablanca';
+UPDATE films SET director = 'Francis Ford Coppola', duration = 113 WHERE title = 'The Conversation';
+
+6.
+INSERT INTO films (title, "year", genre, director, duration) VALUES
+('1984',  1956,  'scifi',   'Michael Anderson',  90),
+('Tinker Tailor Soldier Spy',   2011,  'espionage',   'Tomas Alfredson',   127),
+('The Birdcage',  1996,  'comedy',  'Mike Nichols',  118);
+
+7.
+SELECT title, date_part('year', now()) - "year" AS age FROM films ORDER BY age;
+
+from the solution, the following also works:
+SELECT title, extract("year" from current_date) - "year" AS age FROM films ORDER BY age;
+
+8.
+SELECT title, duration FROM films WHERE duration > 2 * 60 ORDER BY duration DESC;
+
+9.
+SELECT title FROM films ORDER BY duration DESC LIMIT 1;

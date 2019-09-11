@@ -1,0 +1,28 @@
+1. declarative, special purpose
+
+2. DDL, DML, DCL
+
+3.
+'canoe'
+'a long road'
+'weren''t'
+'"No way!"'
+
+4.
+||
+SELECT 'str1' || 'str2';
+# 'str1str2'
+
+5.
+lower()
+SELECT lower('ADSFdfas');
+# 'adsfdfas'
+
+6.
+t
+f
+
+7.
+SELECT floor(4 * pi() * (26.3 ^ 2));
+SELECT floor(4 * pi() * (26.3 ^ 2)) || ' cm2';
+# 8692 cm2
