@@ -33,3 +33,18 @@ SELECT date, round((low + high) / 2.0, 1) AS average FROM temperatures WHERE dat
 ALTER TABLE temperatures ADD COLUMN rainfall int DEFAULT 0;
 
 7.
+UPDATE temperatures SET rainfall = (low + high) / 2 - 35 WHERE (low + high) / 2 > 35;
+
+8.
+ALTER TABLE temperatures ALTER COLUMN rainfall TYPE numeric(5,3);
+UPDATE temperatures SET rainfall = round(rainfall / 25.4, 3);
+
+9.
+ALTER TABLE temperatures RENAME TO weather;
+
+10.
+\d weather;
+
+11.
+pg_dump
+pg_dump -d test -t weather --inserts > not_null.sql

@@ -1,0 +1,74 @@
+1.
+step 1: save the file locally as
+  films2.sql
+step 2: load the file using
+  psql -d test <  films2.sql
+
+2.
+ALTER TABLE films
+  ALTER COLUMN title SET NOT NULL,
+  ALTER COLUMN "year" SET NOT NULL,
+  ALTER COLUMN genre SET NOT NULL,
+  ALTER COLUMN director SET NOT NULL,
+  ALTER COLUMN duration SET NOT NULL;
+
+3. the 'Nullable' col values are all 'not null'
+
+4.
+ALTER TABLE films ADD CONSTRAINT unique_title UNIQUE (title);
+
+5. unique constraints are displayed at the end of a table's description:
+Indexes:
+    "unique_title" UNIQUE CONSTRAINT, btree (title)
+
+6.
+ALTER TABLE films DROP CONSTRAINT unique_title;
+
+7.
+ALTER TABLE films ADD CHECK (length(title) > 0);
+
+8.
+INSERT INTO films(title, "year", genre, director, duration) VALUES ('', 1941, 'action', 'No One', 123);
+ERROR:  new row for relation "films" violates check constraint "films_title_check"
+DETAIL:  Failing row contains (, 1941, action, No One, 123).
+
+9. check constraints are displayed at the end of a table's description:
+Check constraints:
+    "films_title_check" CHECK (length(title::text) > 0)
+
+10.
+ALTER TABLE films DROP CONSTRAINT films_title_check;
+
+11.
+ALTER TABLE films ADD CONSTRAINT film_year CHECK ("year" BETWEEN 1900 AND 2100);
+
+12. check constraints are displayed at the end of a table's description:
+Check constraints:
+    "film_year" CHECK (year >= 1900 AND year <= 2100)
+
+13.
+ALTER TABLE films ADD CONSTRAINT film_director CHECK (length(director) > 2 AND director LIKE '% %');
+
+14. check constraints are displayed at the end of a table's description:
+Check constraints:
+    "film_director" CHECK (length(director::text) > 2 AND director::text ~~ '% %'::text)
+
+15.
+UPDATE films SET director = 'Johnny' WHERE title = 'Die Hard';
+ERROR:  new row for relation "films" violates check constraint "film_director"
+DETAIL:  Failing row contains (Die Hard, 1988, action, Johnny, 132).
+
+16.
+add NOT NULL, UNIQUE or CHECK constraints
+use a restrictive data type (which can include a length limitation)
+
+17.
+CREATE TABLE crazy (
+  id int,
+  num int DEFAULT 0
+);
+ALTER TABLE crazy ADD CONSTRAINT non_zero CHECK (num > 0);
+INSERT INTO crazy (id) VALUES (1);
+
+18.
+\d <tablename>

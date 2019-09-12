@@ -11,3 +11,24 @@ SELECT state, count(state) FROM people GROUP BY state ORDER BY count DESC LIMIT 
 
 4.
 SELECT (regexp_split_to_array(email, '@'))[2] AS domain, count(email) FROM people GROUP BY domain ORDER BY count DESC;
+
+or
+SELECT substr(email, strpos(email, '@') + 1) AS domain, count(email) FROM people GROUP BY domain ORDER BY count DESC;
+
+5.
+SELECT * FROM people WHERE id = 3399; -- test first ...
+DELETE FROM people WHERE id = 3399; -- ... then del
+
+6.
+SELECT * FROM people WHERE state = 'CA'; -- test first ...
+DELETE FROM people WHERE state = 'CA'; -- ... then del
+
+7.
+SELECT id, given_name, email FROM people WHERE strpos(email, 'teleworm.us') <> 0;
+UPDATE people SET given_name = upper(given_name) WHERE strpos(email, 'teleworm.us') <> 0;
+
+or
+UPDATE people SET given_name = upper(given_name) WHERE email LIKE '%teleworm.us';
+
+8.
+DELETE FROM people;
