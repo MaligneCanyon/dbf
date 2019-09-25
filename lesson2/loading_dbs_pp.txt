@@ -1,7 +1,7 @@
 1.
 Step 1: save the content to a file locally
 Step 2: load the local file using
-  psql -d test < loading_dbs_pp1.sql
+  psql -d test < films1.sql
 - the file creates a table called 'films' and populates it w/ data
 - output of the cmds is
   NOTICE:  table "films" does not exist, skipping
@@ -45,3 +45,4 @@ SELECT title, duration FROM films WHERE duration > 2 * 60 ORDER BY duration DESC
 
 9.
 SELECT title FROM films ORDER BY duration DESC LIMIT 1;
+

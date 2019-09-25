@@ -1,0 +1,8 @@
+1. conceptual, logical, physical
+
+2. high-level abstract view of entities and their relationships
+
+3. low-level detailed view of entities and their attribs, described in relations
+(db-specific, focused on implementation)
+
+4. one-to-one, one-to-many, many-to-many

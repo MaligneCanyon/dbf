@@ -1,0 +1,61 @@
+1.
+- create a new db
+> createdb test3
+- right click and save the sql file locally as orders_products1.sql
+- load the sql file into the new db using
+> psql - d test3 < orders_products1.sql
+
+2.
+- add a FK constraint to the orders table
+ALTER TABLE orders ADD CONSTRAINT orders_product_id_fkey FOREIGN KEY (product_id)
+  REFERENCES products(id);
+
+or
+ALTER TABLE orders ADD FOREIGN KEY (product_id)
+  REFERENCES products(id);
+
+3.
+presuming the data to represent orders (and not inventory)
+INSERT INTO products (name) VALUES
+  ('small bolt'),
+  ('large bolt');
+INSERT INTO orders (product_id, quantity) VALUES
+  (1, 10),
+  (1, 25),
+  (2, 15);
+
+4.
+SELECT quantity, name FROM orders JOIN products ON orders.product_id = products.id;
+
+5.
+yes
+INSERT INTO orders (quantity) VALUES
+  (100);
+
+6.
+ALTER TABLE orders ALTER COLUMN product_id SET NOT NULL;
+ERROR:  column "product_id" contains null values
+
+7.
+either delete the offending row first, or do something like
+UPDATE orders SET product_id = 1 WHERE product_id IS NULL;
+then
+ALTER TABLE orders ALTER COLUMN product_id SET NOT NULL;
+
+8.
+CREATE TABLE reviews (
+  id serial PRIMARY KEY,
+  review text NOT NULL,
+  product_id int REFERENCES products(id)
+);
+
+9.
+INSERT INTO reviews (product_id, review) VALUES
+  (1, 'a little small'),
+  (1, 'very round!'),
+  (2, 'could have been smaller');
+
+10.
+false; the following works:
+INSERT INTO reviews (product_id, review) VALUES
+  (NULL, 'a biggie');

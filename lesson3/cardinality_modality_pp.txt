@@ -1,0 +1,11 @@
+1.
+cardinality is the num of objs on each side of a relationship
+
+2.
+modality (as in mode) is whether a relationship is req'd (1) or optional (0)
+
+3.
+at least one entity instance w/ modality = 1
+
+4.
+crow's foot
