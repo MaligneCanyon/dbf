@@ -1,0 +1,43 @@
+1.
+SELECT b.id, b.author, string_agg(c.name, ', ') AS categories
+  FROM books as b
+    INNER JOIN books_categories AS bc ON b.id = bc.book_id
+    INNER JOIN categories AS c ON bc.category_id = c.id
+  GROUP BY b.id;
+
+2.
+- first need to chg the title datatype to accept more chars
+ALTER TABLE books ALTER COLUMN title TYPE text;
+
+INSERT INTO books (author, title) VALUES
+  ('Lynn Sherr',  'Sally Ride: America''s First Woman in Space'),
+  ('Charlotte Brontë', 'Jane Eyre'),
+  ('Meeru Dhalwala and Vikram Vij',  'Vij''s: Elegant and Inspired Indian Cuisine');
+
+INSERT INTO categories (name) VALUES
+  ('Space Exploration'),
+  ('Cookbook'),
+  ('South Asia');
+
+INSERT INTO books_categories VALUES
+  (4, 5),
+  (4, 1),
+  (4, 7),
+  (5, 2),
+  (5, 4),
+  (6, 8),
+  (6, 1),
+  (6, 9);
+
+3.
+ALTER TABLE books_categories ADD UNIQUE (book_id, category_id);
+
+or
+ALTER TABLE books_categories ADD CONSTRAINT book_category_ids_unique UNIQUE (book_id, category_id);
+
+4.
+SELECT c.name, count(c.name) AS book_count, string_agg(b.title, ', ') AS book_titles
+  FROM books as b
+    INNER JOIN books_categories AS bc ON b.id = bc.book_id
+    INNER JOIN categories AS c ON bc.category_id = c.id
+  GROUP BY c.name ORDER BY c.name;
