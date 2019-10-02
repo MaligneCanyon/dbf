@@ -1,9 +1,9 @@
 1.
 - create a new db
-> createdb test3
+> createdb using_fks
 - right click and save the sql file locally as orders_products1.sql
 - load the sql file into the new db using
-> psql - d test3 < orders_products1.sql
+> psql - d using_fks < orders_products1.sql
 
 2.
 - add a FK constraint to the orders table
@@ -59,6 +59,4 @@ INSERT INTO reviews (product_id, review) VALUES
 false; the following works:
 INSERT INTO reviews (product_id, review) VALUES
   (NULL, 'a biggie');
-
-
 

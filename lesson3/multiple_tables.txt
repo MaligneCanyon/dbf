@@ -1,3 +1,6 @@
+see the "Database Diagrams: Cardinality and Modality" video (starting around 3:40) for
+the conceptual schema of this db
+
 1.
 - save the file locally by right-clicking an selecting "save as"
 - load the file using
@@ -14,7 +17,7 @@ SELECT count(DISTINCT customer_id) AS customers FROM tickets;
 
 4.
 SELECT (
-  (SELECT count(DISTINCT customer_id) AS percent FROM tickets) /
+  (SELECT count(DISTINCT customer_id) FROM tickets) /
   (SELECT count(DISTINCT id) FROM customers)::float * 100
 ) AS percent;
 
@@ -47,3 +50,4 @@ seats.row, seats.number AS seat
     JOIN seats ON tickets.seat_id = seats.id
     JOIN sections ON seats.section_id = sections.id
   WHERE customers.email = 'gennaro.rath@mcdermott.co';
+

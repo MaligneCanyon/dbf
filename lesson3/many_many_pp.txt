@@ -3,10 +3,12 @@ SELECT b.id, b.author, string_agg(c.name, ', ') AS categories
   FROM books as b
     INNER JOIN books_categories AS bc ON b.id = bc.book_id
     INNER JOIN categories AS c ON bc.category_id = c.id
-  GROUP BY b.id;
+  GROUP BY b.id
+  ORDER BY b.id
+;
 
 2.
-- first need to chg the title datatype to accept more chars
+- first need to chg the "title" datatype to accept more chars
 ALTER TABLE books ALTER COLUMN title TYPE text;
 
 INSERT INTO books (author, title) VALUES
@@ -40,4 +42,7 @@ SELECT c.name, count(c.name) AS book_count, string_agg(b.title, ', ') AS book_ti
   FROM books as b
     INNER JOIN books_categories AS bc ON b.id = bc.book_id
     INNER JOIN categories AS c ON bc.category_id = c.id
-  GROUP BY c.name ORDER BY c.name;
+  GROUP BY c.name
+  ORDER BY c.name
+;
+

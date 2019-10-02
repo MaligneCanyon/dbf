@@ -1,3 +1,5 @@
+	
+
 1.
 > createdb converting
 > psql -d converting < films7.sql
@@ -70,9 +72,11 @@ INSERT INTO films_directors (film_id, director_id) VALUES
    (SELECT id FROM directors WHERE directors.name = 'Robert Rodriguez'));
 
 7.
-SELECT d.name, count(d.name) AS number_of_films
+SELECT d.name AS director, count(f.id) AS "films"
   FROM films AS f
     INNER JOIN films_directors AS fd ON f.id = fd.film_id
     INNER JOIN directors AS d ON d.id = fd.director_id
   GROUP BY d.name
-  ORDER BY number_of_films DESC, d.name;
+  ORDER BY "films" DESC, d.name
+;
+

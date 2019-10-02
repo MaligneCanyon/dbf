@@ -6,7 +6,6 @@ INSERT INTO calls ("when", duration, contact_id) VALUES
 2.
 SELECT calls.when, calls.duration, contacts.first_name FROM
   calls INNER JOIN contacts ON calls.contact_id = contacts.id
-  WHERE (contacts.first_name || ' ' || contacts.last_name) != 'William Swift';
   WHERE contacts.first_name != 'William' AND contacts.last_name != 'Swift';
 
 from the solution, the last line can be written as
@@ -44,3 +43,4 @@ DETAIL:  Key (number)=(6343511126) already exists.
 
 7.
 see notes, DBFp7a
+
