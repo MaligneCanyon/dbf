@@ -1,0 +1,53 @@
+1.
+> createdb auction
+> psql -d auction
+
+CREATE TABLE bidders (
+  id serial PRIMARY KEY,
+  name text NOT NULL
+);
+
+CREATE TABLE items (
+  id serial PRIMARY KEY,
+  name text NOT NULL,
+  initial_price numeric(6,2) NOT NULL,
+  sales_price numeric(6,2)
+);
+
+CREATE TABLE bids (
+  id serial PRIMARY KEY,
+  bidder_id int NOT NULL REFERENCES bidders (id) ON DELETE CASCADE,
+  item_id int NOT NULL REFERENCES items (id) ON DELETE CASCADE,
+  amount numeric(6,2) NOT NULL
+);
+
+CREATE INDEX ON bids (bidder_id, item_id);
+
+-- list the col headers here (and not in the csv files) and use ...
+\copy bidders (id, name) FROM 'bidders.csv' WITH DELIMITER ','
+\copy items (id, name, initial_price, sales_price) FROM 'items.csv' WITH DELIMITER ','
+\copy bids (id, bidder_id, item_id, amount) FROM 'bids.csv' WITH DELIMITER ',', HEADER
+
+or
+-- list the col headers in the csv files and use ...
+\copy bidders FROM 'bidders.csv' WITH HEADER CSV
+\copy items FROM 'items.csv' WITH HEADER CSV
+\copy bids FROM 'bids.csv' WITH HEADER CSV
+
+2.
+SELECT name AS "Bid On Items" FROM items WHERE id IN
+  (SELECT DISTINCT item_id FROM bids);
+
+3.
+SELECT name AS "Not Bid On" FROM items WHERE id NOT IN
+  (SELECT DISTINCT item_id FROM bids);
+
+4.
+SELECT name FROM bidders WHERE EXISTS
+  (SELECT 1 FROM bids WHERE bidders.id = bids.bidder_id);
+  -- SELECT 1 is arbitrary, used as a trigger to get EXISTS to rtn 't' or 'f';
+  -- could use SELECT bids.id also, but that clouds the issue
+
+5.
+SELECT max(count) FROM
+  (SELECT count(bidder_id) FROM bids GROUP BY bidder_id) AS bc;

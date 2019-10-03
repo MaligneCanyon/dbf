@@ -1,0 +1,84 @@
+--
+-- Indexes
+--
+
+createdb library
+psql -d library
+
+CREATE TABLE authors (
+  id serial PRIMARY KEY,
+  name varchar(100) NOT NULL
+);
+
+INSERT INTO authors (name) VALUES
+  ('William Gibson'),
+  ('Iain M. Banks'),
+  ('Philip K. Dick');
+
+CREATE TABLE books (
+  id serial PRIMARY KEY,
+  title varchar(100) NOT NULL,
+  isbn char(13) UNIQUE NOT NULL,
+  author_id int REFERENCES authors(id)
+);
+
+INSERT INTO books (title, isbn, author_id) VALUES
+  ('Neuromancer', '9780441569595', 1),
+  ('Consider Phlebas', '9780316005388', 2),
+  ('Idoru', '9780425158647', 1),
+  ('The State of the Art', '0929480066', 2),
+  ('The Simulacra', '9780547572505', 3),
+  ('Pattern Recognition', '9780425198681', 1),
+  ('A Scanner Darkly', '9780547572178', 3);
+
+\d books
+CREATE INDEX ON books (author_id);
+\d books
+\di
+DROP INDEX books_author_id_idx;
+\di
+
+
+--
+-- Comparing SQL Statements
+--
+
+EXPLAIN SELECT * FROM books;
+
+EXPLAIN SELECT books.title FROM books
+  JOIN authors ON books.author_id = authors.id
+  WHERE authors.name = 'William Gibson';
+
+EXPLAIN SELECT title FROM books
+  WHERE author_id =
+    (SELECT id FROM authors WHERE name = 'William Gibson');
+
+EXPLAIN ANALYZE SELECT books.title FROM books
+  JOIN authors ON books.author_id = authors.id
+  WHERE authors.name = 'William Gibson';
+
+
+--
+-- Subqueries
+--
+
+SELECT title FROM books WHERE author_id =
+  (SELECT id FROM authors WHERE name = 'William Gibson');
+
+SELECT id FROM authors WHERE name = 'William Gibson';
+SELECT title FROM books WHERE author_id = 1;
+
+SELECT 1 WHERE EXISTS
+  (SELECT id FROM books WHERE isbn = '9780316005388');
+SELECT name FROM authors WHERE id IN
+  (SELECT author_id FROM books WHERE title LIKE 'The%');
+SELECT name FROM authors WHERE id NOT IN
+  (SELECT author_id FROM books WHERE title LIKE 'The%');
+SELECT name FROM authors WHERE length(name) > ANY
+  (SELECT length(title) FROM books WHERE title LIKE 'The%');
+SELECT name FROM authors WHERE length(name) = ANY
+  (SELECT length(title) FROM books WHERE title LIKE 'The%');
+SELECT name FROM authors WHERE length(name) > ALL
+  (SELECT length(title) FROM books WHERE title LIKE 'The%');
+SELECT name FROM authors WHERE length(name) <> ALL
+  (SELECT length(title) FROM books WHERE title LIKE 'The%');
