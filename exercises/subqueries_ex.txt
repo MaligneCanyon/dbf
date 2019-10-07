@@ -46,8 +46,56 @@ SELECT name AS "Not Bid On" FROM items WHERE id NOT IN
 SELECT name FROM bidders WHERE EXISTS
   (SELECT 1 FROM bids WHERE bidders.id = bids.bidder_id);
   -- SELECT 1 is arbitrary, used as a trigger to get EXISTS to rtn 't' or 'f';
-  -- could use SELECT bids.id also, but that clouds the issue
+  -- could use SELECT bids.id (or bidder_id) also, but that clouds the issue
 
 5.
 SELECT max(count) FROM
   (SELECT count(bidder_id) FROM bids GROUP BY bidder_id) AS bc;
+
+or
+SELECT count(bidder_id) AS max_bid FROM bids
+  GROUP BY bidder_id
+  ORDER BY max_bid DESC
+  LIMIT 1;
+
+6.
+SELECT name, (SELECT count(item_id) FROM bids WHERE item_id = items.id) FROM items;
+
+or
+SELECT i.name, count(b.item_id) FROM items AS i
+  LEFT OUTER JOIN bids AS b ON i.id = b.item_id
+  GROUP BY i.name;
+
+7.
+SELECT id FROM items WHERE
+  (name, initial_price, sales_price) = ('Painting', 100.00, 250.00);
+
+8.
+EXPLAIN SELECT name FROM bidders WHERE EXISTS
+  (SELECT 1 FROM bids WHERE bidders.id = bids.bidder_id);
+
+                                QUERY PLAN
+--------------------------------------------------------------------------
+ Hash Join  (cost=33.38..62.84 rows=635 width=32)
+   Hash Cond: (bidders.id = bids.bidder_id)
+   ->  Seq Scan on bidders  (cost=0.00..22.70 rows=1270 width=36)
+   ->  Hash  (cost=30.88..30.88 rows=200 width=4)
+         ->  HashAggregate  (cost=28.88..30.88 rows=200 width=4)
+               Group Key: bids.bidder_id
+               ->  Seq Scan on bids  (cost=0.00..25.10 rows=1510 width=4)
+
+EXPLAIN ANALYZE SELECT name FROM bidders WHERE EXISTS
+  (SELECT 1 FROM bids WHERE bidders.id = bids.bidder_id);
+
+9.
+EXPLAIN ANALYZE SELECT max(count) FROM
+  (SELECT count(bidder_id) FROM bids GROUP BY bidder_id) AS bc;
+
+EXPLAIN ANALYZE SELECT COUNT(bidder_id) AS max_bid FROM bids
+  GROUP BY bidder_id
+  ORDER BY max_bid DESC
+  LIMIT 1;
+
+from the solution,
+- using a subq is faster but slightly more costly on system resources
+- results may dif signif w/ more data (i.e. larger tbl sizes)
