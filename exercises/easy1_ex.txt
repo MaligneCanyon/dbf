@@ -34,9 +34,9 @@ SELECT * FROM birds WHERE age = 3 AND species = 'Finch';
 DELETE FROM birds WHERE age = 3 AND species = 'Finch';
 
 8.
-ALTER TABLE birds ADD CONSTRAINT check_age CHECK (age >= 0); # long form
-ALTER TABLE birds ADD CHECK (age >= 0); # shorthand
-INSERT INTO birds (age, name, species) VALUES (-2, 'Alan', 'Blue Jay'); # to test
+ALTER TABLE birds ADD CONSTRAINT check_age CHECK (age >= 0); -- long form
+ALTER TABLE birds ADD CHECK (age >= 0); -- shorthand
+INSERT INTO birds (age, name, species) VALUES (-2, 'Alan', 'Blue Jay'); -- to test
 
 9.
 DROP TABLE birds;

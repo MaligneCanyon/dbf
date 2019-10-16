@@ -2,7 +2,9 @@
 step 1: save the file locally as
   films4.sql
 step 2: load the file using
-  psql -d test <  films4.sql
+  psql -d group_by <  films4.sql
+step 3: load the db
+  psql -d group_by
 
 2.
 INSERT INTO films (title, "year", genre, director, duration) VALUES
@@ -28,13 +30,18 @@ SELECT "year" / 10 * 10 AS decade, round(avg(duration)) AS average_duration FROM
 SELECT * FROM films WHERE substr(director, 1, 5) = 'John ';
 
 or
-SELECT * FROM films WHERE director LIKE('John %');
+SELECT * FROM films WHERE director ~~ 'John %';
 
 9.
 SELECT genre, count(genre) FROM films GROUP BY genre ORDER BY count DESC;
 
 10.
-SELECT "year" / 10 * 10 AS decade, genre, string_agg(title, ', ') FROM films GROUP BY decade, genre ORDER BY decade;
+SELECT "year" / 10 * 10 AS decade, genre, string_agg(title, ', ') AS "films" FROM films
+  GROUP BY decade, genre
+  ORDER BY decade;
 
 11.
-SELECT genre, sum(duration) AS total_duration FROM films GROUP BY genre ORDER BY total_duration;
+SELECT genre, sum(duration) AS total_duration FROM films
+  GROUP BY genre
+  ORDER BY total_duration;
+

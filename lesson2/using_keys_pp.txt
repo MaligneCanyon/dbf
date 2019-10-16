@@ -29,3 +29,4 @@ ERROR:  multiple primary keys for table "films" are not allowed
 
 9.
 ALTER TABLE films DROP CONSTRAINT films_pkey;
+

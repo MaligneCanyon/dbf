@@ -1,8 +1,12 @@
 1.
 step 1: save the file locally as
   films2.sql
-step 2: load the file using
-  psql -d test <  films2.sql
+step 2: create a db
+  createdb more_constraints
+step 3: load the file using
+  psql -d more_constraints <  films2.sql
+step 4: load the db
+  psql -d more_constraints
 
 2.
 ALTER TABLE films
@@ -59,10 +63,11 @@ ERROR:  new row for relation "films" violates check constraint "film_director"
 DETAIL:  Failing row contains (Die Hard, 1988, action, Johnny, 132).
 
 16.
-add NOT NULL, UNIQUE or CHECK constraints
+add NOT NULL, DEFAULT, UNIQUE or CHECK constraints
 use a restrictive data type (which can include a length limitation)
 
 17.
+yes;
 CREATE TABLE crazy (
   id int,
   num int DEFAULT 0
@@ -72,3 +77,4 @@ INSERT INTO crazy (id) VALUES (1);
 
 18.
 \d <tablename>
+
