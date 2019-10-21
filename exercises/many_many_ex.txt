@@ -79,19 +79,18 @@ INSERT INTO customers_services (customer_id, service_id) VALUES
   (6, 6),
   (6, 7);
 
-ALTER TABLE customers_services ADD UNIQUE(customer_id, service_id);
-
 2.
-SELECT DISTINCT c.* FROM customers AS c
-  LEFT OUTER JOIN customers_services AS cs ON c.id = cs.customer_id
-  WHERE cs.service_id IS NOT NULL
-  ORDER BY c.id;
+SELECT DISTINCT c.*
+  FROM customers AS c
+    INNER JOIN customers_services AS cs ON c.id = cs.customer_id
+;
 
 3.
-SELECT DISTINCT c.* FROM customers AS c
-  LEFT OUTER JOIN customers_services AS cs ON c.id = cs.customer_id
+SELECT DISTINCT c.*
+  FROM customers AS c
+    LEFT OUTER JOIN customers_services AS cs ON c.id = cs.customer_id
   WHERE cs.service_id IS NULL
-  ORDER BY c.id;
+;
 
 SELECT DISTINCT c.*, s.*
   FROM customers AS c
@@ -107,6 +106,8 @@ SELECT DISTINCT s.description
   WHERE cs.service_id IS NULL;
 
 5.
+-- the first loj creates a result table which must again be loj'd w/ services
+-- (to preserve the row from the first loj where the user has no services)
 SELECT c.name, string_agg(s.description, ', ') AS services
   FROM customers AS c
     LEFT OUTER JOIN customers_services AS cs ON c.id = cs.customer_id
@@ -114,15 +115,14 @@ SELECT c.name, string_agg(s.description, ', ') AS services
   GROUP BY c.id;
 
 6.
-SELECT s.description, count(s.description) AS "count"
-  FROM customers AS c
-    INNER JOIN customers_services AS cs ON c.id = cs.customer_id
-    INNER JOIN services AS s ON s.id = cs.service_id
-  GROUP BY s.description
+SELECT s.description, count(s.id) AS "count"
+  FROM services AS s
+    INNER JOIN customers_services AS cs ON s.id = cs.service_id
+  GROUP BY s.id
   -- HAVING "count" > 2 -- stupidly, this doesn't work ...
-  HAVING count(s.description) > 2 -- ... but this does
-  ORDER BY "count" DESC -- and so does this (although it's not the req'd ordering)
-  ORDER BY s.description;
+  HAVING count(s.id) > 2 -- ... but this does
+  -- ORDER BY "count" DESC -- and so does this (although it's not the req'd ordering)
+;
 
 7.
 SELECT sum(s.price) AS gross
@@ -157,3 +157,4 @@ DELETE FROM customers WHERE name = 'Chen Ke-Hua';
 DELETE FROM customers_services WHERE service_id =
   (SELECT id FROM services WHERE description = 'Bulk Email');
 DELETE FROM services  WHERE description = 'Bulk Email';
+

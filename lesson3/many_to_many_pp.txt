@@ -1,10 +1,10 @@
 1.
 SELECT b.id, b.author, string_agg(c.name, ', ') AS categories
-  FROM books as b
+  FROM books AS b
     INNER JOIN books_categories AS bc ON b.id = bc.book_id
     INNER JOIN categories AS c ON bc.category_id = c.id
   GROUP BY b.id
-  ORDER BY b.id
+  -- ORDER BY b.id
 ;
 
 2.
@@ -39,7 +39,7 @@ ALTER TABLE books_categories ADD CONSTRAINT book_category_ids_unique UNIQUE (boo
 
 4.
 SELECT c.name, count(c.name) AS book_count, string_agg(b.title, ', ') AS book_titles
-  FROM books as b
+  FROM books AS b
     INNER JOIN books_categories AS bc ON b.id = bc.book_id
     INNER JOIN categories AS c ON bc.category_id = c.id
   GROUP BY c.name

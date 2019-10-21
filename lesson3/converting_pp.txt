@@ -28,6 +28,9 @@ INSERT INTO films_directors (film_id, director_id) VALUES
 4.
 ALTER TABLE films DROP COLUMN director_id;
 
+or
+ALTER TABLE films DROP director_id;
+
 5.
 SELECT f.title, d.name
   FROM films AS f
@@ -72,11 +75,11 @@ INSERT INTO films_directors (film_id, director_id) VALUES
    (SELECT id FROM directors WHERE directors.name = 'Robert Rodriguez'));
 
 7.
-SELECT d.name AS director, count(f.id) AS "films"
-  FROM films AS f
-    INNER JOIN films_directors AS fd ON f.id = fd.film_id
-    INNER JOIN directors AS d ON d.id = fd.director_id
+-- don't need to use the films table here
+SELECT d.name AS director, count(fd.film_id) AS films
+  FROM directors AS d
+    INNER JOIN films_directors AS fd ON d.id = fd.director_id
   GROUP BY d.name
-  ORDER BY "films" DESC, d.name
+  ORDER BY films DESC, d.name
 ;
 

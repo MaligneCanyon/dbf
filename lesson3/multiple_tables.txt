@@ -4,7 +4,9 @@ the conceptual schema of this db
 1.
 - save the file locally by right-clicking an selecting "save as"
 - load the file using
-    psql -d multi_tbl < theater_full.sql
+    psql -d multiple_tables < theater_full.sql
+- load the database using
+    psql -d multiple_tables
 
 2.
 SELECT count(id) as tickets_sold FROM tickets;
@@ -42,12 +44,12 @@ SELECT customers.id, customers.email, count(DISTINCT tickets.event_id)
   HAVING count(DISTINCT tickets.event_id) = 3;
 
 7.
-SELECT events.name AS event, events.starts_at, sections.name AS section,
-seats.row, seats.number AS seat
-  FROM tickets
-    JOIN customers ON tickets.customer_id = customers.id
-    JOIN events ON tickets.event_id = events.id
-    JOIN seats ON tickets.seat_id = seats.id
-    JOIN sections ON seats.section_id = sections.id
-  WHERE customers.email = 'gennaro.rath@mcdermott.co';
+SELECT e.name AS event, e.starts_at, se.name AS section, s.row, s.number AS seat
+  FROM customers AS c
+    JOIN tickets  AS t  on c.id = t.customer_id
+    JOIN events   AS e  on e.id = t.event_id
+    JOIN seats    AS s  on s.id = t.seat_id
+    JOIN sections AS se on se.id = s.section_id
+  WHERE c.email ~~ 'gennaro%';
+  -- WHERE customers.email = 'gennaro.rath@mcdermott.co';
 

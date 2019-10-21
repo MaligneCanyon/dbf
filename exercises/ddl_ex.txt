@@ -1,10 +1,11 @@
 1.
 > createdb extrasolar
+
 CREATE TABLE stars (
   id serial PRIMARY KEY,
   name varchar(25) UNIQUE NOT NULL,
   distance int NOT NULL CHECK (distance > 0),
-  spectral_type char(1)
+  spectral_type char(1) -- or simply "char"
     CHECK (spectral_type = ANY(ARRAY['O', 'B', 'A', 'F', 'G', 'K', 'M'])),
     -- alt: CHECK (spectral_type IN ('O', 'B', 'A', 'F', 'G', 'K', 'M')),
   companions int NOT NULL CHECK (companions >= 0)
@@ -21,7 +22,7 @@ ALTER TABLE planets ADD COLUMN star_id int NOT NULL;
 ALTER TABLE planets ADD FOREIGN KEY (star_id) REFERENCES stars(id);
 
 or
-ALTER TABLE planets ADD COLUMN star_id integer NOT NULL REFERENCES stars (id);
+ALTER TABLE planets ADD COLUMN star_id int NOT NULL REFERENCES stars (id);
 
 3.
 ALTER TABLE stars ALTER COLUMN name TYPE varchar(50);
@@ -31,7 +32,7 @@ ALTER TABLE stars ALTER COLUMN distance TYPE numeric;
 
 5.
 - added the CHECK constraint already !
-ALTER TABLE stars ALTER COLUMN spectral_type ADD CONSTRAINT NOT NULL;
+ALTER TABLE stars ALTER COLUMN spectral_type SET NOT NULL;
 
 6.
 CREATE TYPE spectral_class AS ENUM ('O', 'B', 'A', 'F', 'G', 'K', 'M', 'X');
@@ -49,7 +50,7 @@ ALTER TABLE planets
 8.
 ALTER TABLE planets ADD COLUMN semi_major_axis numeric NOT NULL;
 
-- if data already exists in the table, get errors
+- if data already exists in the table, the above cmd will gen errors
 ERROR:  column "semi_major_axis" contains null values
 UPDATE planets SET semi_major_axis = 0.04 WHERE designation = 'b';
 ERROR:  column "semi_major_axis" of relation "planets" does not exist
@@ -73,3 +74,4 @@ CREATE TABLE moons (
 10.
 \c test
 DROP DATABASE extrasolar;
+

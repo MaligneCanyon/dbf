@@ -82,3 +82,4 @@ SELECT name FROM authors WHERE length(name) > ALL
   (SELECT length(title) FROM books WHERE title LIKE 'The%');
 SELECT name FROM authors WHERE length(name) <> ALL
   (SELECT length(title) FROM books WHERE title LIKE 'The%');
+

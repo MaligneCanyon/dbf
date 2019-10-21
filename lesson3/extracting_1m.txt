@@ -27,3 +27,4 @@ ALTER TABLE directors ADD CONSTRAINT valid_name
 
 SELECT films.title, films.year, films.genre, directors.name AS director, films.duration FROM
   films INNER JOIN directors ON films.director_id = directors.id;
+

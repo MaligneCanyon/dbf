@@ -53,9 +53,9 @@ SELECT max(count) FROM
   (SELECT count(bidder_id) FROM bids GROUP BY bidder_id) AS bc;
 
 or
-SELECT count(bidder_id) AS max_bid FROM bids
+SELECT count(bidder_id) AS max FROM bids
   GROUP BY bidder_id
-  ORDER BY max_bid DESC
+  ORDER BY max DESC
   LIMIT 1;
 
 6.
@@ -99,3 +99,4 @@ EXPLAIN ANALYZE SELECT COUNT(bidder_id) AS max_bid FROM bids
 from the solution,
 - using a subq is faster but slightly more costly on system resources
 - results may dif signif w/ more data (i.e. larger tbl sizes)
+
